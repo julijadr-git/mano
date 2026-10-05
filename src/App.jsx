@@ -88,7 +88,6 @@ function App() {
       <section id="center">
         <div>
           <h1>Sveiki atvykę!</h1>
-          <p>Prisijunkite prie savo paskyros</p>
         </div>
 
         <LoginCard />
