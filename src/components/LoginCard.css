@@ -1,0 +1,150 @@
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    padding: 32px;
+    margin: 0 auto;
+  
+    background: rgba(15, 22, 40, 0.78);
+    border: 1px solid rgba(130, 170, 255, 0.3);
+    border-radius: 18px;
+  
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  
+    box-shadow:
+      0 0 25px rgba(40, 110, 255, 0.12),
+      0 0 45px rgba(150, 70, 255, 0.08);
+  
+    text-align: left;
+  }
+  
+  .login-card-title {
+    margin: 0 0 8px;
+    color: #f2f7ff;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .login-card-description {
+    margin-bottom: 28px;
+    color: #aab8d0;
+    font-size: 15px;
+    text-align: center;
+  }
+  
+  .login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .login-field label {
+    color: #dceaff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .login-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+  
+    background: rgba(10, 17, 32, 0.8);
+    border: 1px solid rgba(130, 170, 255, 0.3);
+    border-radius: 8px;
+  
+    color: #f2f7ff;
+    font-size: 15px;
+    font-family: inherit;
+  
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .login-field input::placeholder {
+    color: #71829d;
+  }
+  
+  .login-field input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 13px;
+  
+    border: none;
+    border-radius: 8px;
+  
+    background: linear-gradient(110deg, #5541d9, #168de0);
+    color: #ffffff;
+  
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+  
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(75, 120, 255, 0.35);
+  }
+  
+  .login-button:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 3px;
+  }
+  
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 24px 20px;
+    }
+  
+    .login-card-title {
+      font-size: 24px;
+    }
+  }
+  .login-section {
+    width: 100%;
+    max-width: 420px;
+  }
+  
+  .help-section {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .help-title {
+    margin: 0 0 10px;
+    color: var(--text-h);
+    font-size: 16px;
+  }
+  
+  .help-card {
+    width: 40%;
+    padding: 14px;
+    color: var(--text-h);
+    font: inherit;
+    background: rgba(15, 22, 40, 0.78);
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .help-card:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+  }
+  
+  .help-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }

@@ -1,0 +1,186 @@
+
+/* ==============================
+   NAVIGACIJOS JUOSTA
+   ============================== */
+
+   .navbar {
+    width: 100%;
+    height: 76px;
+    box-sizing: border-box;
+    padding: 0 40px;
+  
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  
+    background: rgba(13, 16, 30, 0.88);
+    border-bottom: 1px solid rgba(110, 120, 255, 0.16);
+  
+    position: relative;
+    z-index: 10;
+  
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  
+  /* Centrinis logotipas */
+  
+  .navbar-logo {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .navbar-logo svg {
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(110, 100, 255, 0.35));
+  }
+  
+  /* Kalbos pasirinkimo blokas */
+  
+  .language-container {
+    grid-column: 3;
+    justify-self: end;
+    position: relative;
+  }
+  
+  .language-button {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  
+    padding: 9px 13px;
+  
+    color: #e4e7ff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(150, 155, 255, 0.18);
+    border-radius: 8px;
+  
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .language-button:hover {
+    background: rgba(120, 110, 255, 0.12);
+    border-color: rgba(150, 140, 255, 0.45);
+  }
+  
+  .language-arrow {
+    font-size: 9px;
+    color: #9298c7;
+    transition: transform 0.2s ease;
+  }
+  
+  .language-arrow.open {
+    transform: rotate(180deg);
+  }
+  
+  /* Išskleidžiamas kalbos meniu */
+  
+  .language-menu {
+    position: absolute;
+    top: calc(100% + 9px);
+    right: 0;
+  
+    min-width: 90px;
+    padding: 5px;
+  
+    background: #191d32;
+    border: 1px solid rgba(150, 155, 255, 0.2);
+    border-radius: 9px;
+  
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  
+    z-index: 20;
+  }
+  
+  .language-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    padding: 9px 10px;
+  
+    color: #c7cbea;
+    font-size: 13px;
+  
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+  
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .language-option:hover {
+    background: rgba(120, 110, 255, 0.12);
+  }
+  
+  .language-option.active {
+    color: #a99aff;
+    background: rgba(120, 110, 255, 0.1);
+  }
+  
+  /* ==============================
+     PAGRINDINĖ PUSLAPIO DALIS
+     ============================== */
+  
+  #center {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    place-content: center;
+    place-items: center;
+    flex-grow: 1;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  
+  #center h1 {
+    margin: 0;
+  }
+  
+  #center p {
+    margin: 10px 0 0;
+  }
+  
+  /* ==============================
+     PRISITAIKYMAS MOBILIESIEMS
+     ============================== */
+  
+  @media (max-width: 1024px) {
+    #center {
+      padding: 32px 20px 24px;
+      gap: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar {
+      height: 64px;
+      padding: 0 16px;
+    }
+  
+    .navbar-logo {
+      width: 34px;
+      height: 34px;
+    }
+  
+    .navbar-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .language-button {
+      padding: 8px 10px;
+    }
+  }
