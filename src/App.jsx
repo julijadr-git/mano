@@ -6,6 +6,7 @@ import LoginCard from './components/LoginCard'
 function App() {
   const [language, setLanguage] = useState('LT')
   const [languageOpen, setLanguageOpen] = useState(false)
+  const [loggedInEmail, setLoggedInEmail] = useState('')
 
   return (
     <>
@@ -42,45 +43,57 @@ function App() {
           </svg>
         </div>
 
-        {/* Kalbos pasirinkimas */}
-        <div className="language-container">
-          <button
-            className="language-button"
-            onClick={() => setLanguageOpen(!languageOpen)}
-            aria-expanded={languageOpen}
-            aria-label="Pasirinkti kalbą"
-          >
-            {language}
-            <span className={`language-arrow ${languageOpen ? 'open' : ''}`}>
-              ▼
-            </span>
-          </button>
-
-          {languageOpen && (
-            <div className="language-menu">
-              <button
-                className={`language-option ${language === 'LT' ? 'active' : ''}`}
-                onClick={() => {
-                  setLanguage('LT')
-                  setLanguageOpen(false)
-                }}
-              >
-                LT
-                {language === 'LT' && <span>✓</span>}
-              </button>
-
-              <button
-                className={`language-option ${language === 'EN' ? 'active' : ''}`}
-                onClick={() => {
-                  setLanguage('EN')
-                  setLanguageOpen(false)
-                }}
-              >
-                EN
-                {language === 'EN' && <span>✓</span>}
-              </button>
-            </div>
+        <div className="navbar-actions">
+          {loggedInEmail && (
+            <button
+              type="button"
+              className="navbar-logout"
+              onClick={() => setLoggedInEmail('')}
+            >
+              Atsijungti
+            </button>
           )}
+
+          {/* Kalbos pasirinkimas */}
+          <div className="language-container">
+            <button
+              className="language-button"
+              onClick={() => setLanguageOpen(!languageOpen)}
+              aria-expanded={languageOpen}
+              aria-label="Pasirinkti kalbą"
+            >
+              {language}
+              <span className={`language-arrow ${languageOpen ? 'open' : ''}`}>
+                ▼
+              </span>
+            </button>
+
+            {languageOpen && (
+              <div className="language-menu">
+                <button
+                  className={`language-option ${language === 'LT' ? 'active' : ''}`}
+                  onClick={() => {
+                    setLanguage('LT')
+                    setLanguageOpen(false)
+                  }}
+                >
+                  LT
+                  {language === 'LT' && <span>✓</span>}
+                </button>
+
+                <button
+                  className={`language-option ${language === 'EN' ? 'active' : ''}`}
+                  onClick={() => {
+                    setLanguage('EN')
+                    setLanguageOpen(false)
+                  }}
+                >
+                  EN
+                  {language === 'EN' && <span>✓</span>}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
@@ -90,7 +103,10 @@ function App() {
           <h1>Sveiki atvykę!</h1>
         </div>
 
-        <LoginCard />
+        <LoginCard
+          loggedInEmail={loggedInEmail}
+          onLogin={setLoggedInEmail}
+        />
       </section>
     </>
   )

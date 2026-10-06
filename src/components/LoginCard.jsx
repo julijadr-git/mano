@@ -36,11 +36,10 @@ function getSavedAccount() {
   }
 }
 
-function LoginCard() {
+function LoginCard({ loggedInEmail, onLogin }) {
   const [mode, setMode] = useState(getSavedAccount() ? 'login' : 'register')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loggedInEmail, setLoggedInEmail] = useState('')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -75,7 +74,7 @@ function LoginCard() {
             passwordHash: toBase64(passwordHash),
           }),
         )
-        setLoggedInEmail(normalizedEmail)
+        onLogin(normalizedEmail)
         setMode('login')
         setPassword('')
         return
@@ -96,7 +95,7 @@ function LoginCard() {
         return
       }
 
-      setLoggedInEmail(normalizedEmail)
+      onLogin(normalizedEmail)
       setPassword('')
     } catch {
       setMessage('Nepavyko atlikti veiksmo. Bandykite dar kartą.')
@@ -117,13 +116,6 @@ function LoginCard() {
         <div className="login-card" aria-live="polite">
           <h2 className="login-card-title">Prisijungėte</h2>
           <p className="login-card-description">{loggedInEmail}</p>
-          <button
-            type="button"
-            className="login-button"
-            onClick={() => setLoggedInEmail('')}
-          >
-            Atsijungti
-          </button>
         </div>
       </div>
     )
