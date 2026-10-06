@@ -41,13 +41,21 @@
 .tasks-section {
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--surface-card);
   box-shadow: var(--shadow);
 }
 
 .stat-card {
   min-height: 130px;
   padding: 22px 24px;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  box-shadow: var(--shadow-hover);
 }
 
 .stat-label {
@@ -104,14 +112,14 @@
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-subtle);
 }
 
 .progress-fill {
   width: 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), #4388ff);
+  background: linear-gradient(90deg, var(--accent), var(--accent-blue));
   transition: width 0.4s ease;
 }
 
@@ -132,7 +140,7 @@
   padding: 12px 16px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(13, 16, 30, 0.55);
+  background: var(--surface-task);
   color: var(--text-h);
   font: inherit;
   text-align: left;
@@ -151,8 +159,8 @@
 }
 
 .task-item.done {
-  border-color: rgba(147, 101, 255, 0.38);
-  background: rgba(147, 101, 255, 0.14);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .task-item.done .task-title {
@@ -202,6 +210,7 @@
   }
 
   .stats-grid {
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 

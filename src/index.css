@@ -9,12 +9,18 @@
   --accent: #9365ff;
   --accent-bg: rgba(147, 101, 255, 0.12);
   --accent-border: rgba(147, 101, 255, 0.5);
+  --accent-blue: #4388ff;
+
+  --surface-card: rgba(255, 255, 255, 0.035);
+  --surface-subtle: rgba(255, 255, 255, 0.06);
+  --surface-task: rgba(13, 16, 30, 0.55);
 
   --social-bg: rgba(255, 255, 255, 0.04);
 
   --shadow:
     rgba(0, 0, 0, 0.3) 0 10px 15px -3px,
     rgba(0, 0, 0, 0.2) 0 4px 6px -2px;
+  --shadow-hover: rgba(0, 0, 0, 0.36) 0 14px 28px -8px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
