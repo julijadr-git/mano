@@ -111,14 +111,7 @@ function LoginCard({ loggedInEmail, onLogin }) {
   }
 
   if (loggedInEmail) {
-    return (
-      <div className="login-section">
-        <div className="login-card" aria-live="polite">
-          <h2 className="login-card-title">Prisijungėte</h2>
-          <p className="login-card-description">{loggedInEmail}</p>
-        </div>
-      </div>
-    )
+    return null
   }
 
   const isRegistering = mode === 'register'
