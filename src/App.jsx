@@ -1,6 +1,22 @@
 import './App.css'
 
-const tasks = ['Užduotis 1', 'Užduotis 2', 'Užduotis 3', 'Užduotis 4', 'Užduotis 5']
+const tasks = [
+  { id: 1, title: 'Perskaityti 10 puslapių', points: 10, done: false },
+  { id: 2, title: 'Išspręsti 5 matematikos uždavinius', points: 20, done: false },
+  { id: 3, title: 'Sutvarkyti kambarį', points: 15, done: false },
+  { id: 4, title: '30 min. pasivaikščiojimo', points: 10, done: false },
+  { id: 5, title: 'Pakartoti anglų kalbos žodžius', points: 15, done: false },
+]
+
+function renderTasks() {
+  return tasks.map((task) => (
+    <li className="task-item" key={task.id}>
+      <span className="task-number">{String(task.id).padStart(2, '0')}</span>
+      <span className="task-title">{task.title}</span>
+      <span className="task-points">+{task.points} tšk.</span>
+    </li>
+  ))
+}
 
 function App() {
   return (
@@ -48,12 +64,7 @@ function App() {
           <span>5 užduotys</span>
         </div>
         <ul className="task-list">
-          {tasks.map((task, index) => (
-            <li className="task-item" key={task}>
-              <span className="task-number">{String(index + 1).padStart(2, '0')}</span>
-              <span>{task}</span>
-            </li>
-          ))}
+          {renderTasks()}
         </ul>
       </section>
     </main>

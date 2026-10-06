@@ -141,6 +141,17 @@
   font-weight: 700;
 }
 
+.task-title {
+  flex: 1;
+}
+
+.task-points {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 @media (max-width: 600px) {
   .dashboard {
     width: min(100% - 32px, 480px);
