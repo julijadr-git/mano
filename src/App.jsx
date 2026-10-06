@@ -27,18 +27,29 @@ function renderTasks(taskList, toggleTask) {
   ))
 }
 
+function updateStats(taskList) {
+  const completedTasks = taskList.filter((task) => task.done)
+  const totalTasks = taskList.length
+  const completedCount = completedTasks.length
+
+  return {
+    points: completedTasks.reduce((sum, task) => sum + task.points, 0),
+    completedCount,
+    totalTasks,
+    progress: totalTasks === 0 ? 0 : Math.round((completedCount / totalTasks) * 100),
+  }
+}
+
 function App() {
   const [taskList, setTaskList] = useState(tasks)
-
-  function updateStats() {
-    // Statistikos logika bus pridėta kitame žingsnyje.
-  }
+  const stats = updateStats(taskList)
 
   function toggleTask(taskId) {
-    setTaskList((currentTasks) => currentTasks.map((task) => (
+    const updatedTasks = taskList.map((task) => (
       task.id === taskId ? { ...task, done: !task.done } : task
-    )))
-    updateStats()
+    ))
+    setTaskList(updatedTasks)
+    updateStats(updatedTasks)
   }
 
   return (
@@ -51,22 +62,22 @@ function App() {
       <section className="stats-grid" aria-label="Užduočių statistika">
         <article className="stat-card">
           <p className="stat-label">Taškai</p>
-          <p className="stat-value">0</p>
+          <p className="stat-value">{stats.points}</p>
         </article>
         <article className="stat-card">
           <p className="stat-label">Atlikta</p>
-          <p className="stat-value">0 <span>/ 5</span></p>
+          <p className="stat-value">{stats.completedCount} <span>/ {stats.totalTasks}</span></p>
         </article>
         <article className="stat-card">
           <p className="stat-label">Progresas</p>
-          <p className="stat-value">0%</p>
+          <p className="stat-value">{stats.progress}%</p>
         </article>
       </section>
 
       <section className="progress-section" aria-labelledby="progress-title">
         <div className="section-heading">
           <h2 id="progress-title">Progresas</h2>
-          <span>0%</span>
+          <span>{stats.progress}%</span>
         </div>
         <div
           className="progress-track"
@@ -74,16 +85,16 @@ function App() {
           aria-label="Užduočių progresas"
           aria-valuemin="0"
           aria-valuemax="100"
-          aria-valuenow="0"
+          aria-valuenow={stats.progress}
         >
-          <div className="progress-fill" />
+          <div className="progress-fill" style={{ width: `${stats.progress}%` }} />
         </div>
       </section>
 
       <section className="tasks-section" aria-labelledby="tasks-title">
         <div className="section-heading">
           <h2 id="tasks-title">Užduotys</h2>
-          <span>5 užduotys</span>
+          <span>{stats.totalTasks} užduotys</span>
         </div>
         <ul className="task-list">
           {renderTasks(taskList, toggleTask)}
