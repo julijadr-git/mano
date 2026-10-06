@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './LoginCard.css'
 
 const ACCOUNT_KEY = 'mano-local-account'
@@ -42,6 +42,34 @@ function LoginCard({ loggedInEmail, onLogin }) {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [displayName, setDisplayName] = useState('')
+  const [nameDraft, setNameDraft] = useState('')
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+
+  useEffect(() => {
+    if (!loggedInEmail) return
+
+    const account = getSavedAccount()
+    const savedName = account?.email === loggedInEmail ? account.displayName || '' : ''
+    setDisplayName(savedName)
+    setNameDraft(savedName)
+    setIsEditingProfile(false)
+  }, [loggedInEmail])
+
+  function saveProfile(event) {
+    event.preventDefault()
+    const account = getSavedAccount()
+    const nextName = nameDraft.trim()
+
+    if (!account || account.email !== loggedInEmail) return
+
+    localStorage.setItem(
+      ACCOUNT_KEY,
+      JSON.stringify({ ...account, displayName: nextName }),
+    )
+    setDisplayName(nextName)
+    setIsEditingProfile(false)
+  }
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -111,7 +139,54 @@ function LoginCard({ loggedInEmail, onLogin }) {
   }
 
   if (loggedInEmail) {
-    return null
+    return (
+      <div className="login-section">
+        <div className="login-card profile-card">
+          <h2 className="login-card-title">Mano profilis</h2>
+          <div className="profile-details">
+            <p><span>El. paštas</span>{loggedInEmail}</p>
+            {displayName && <p><span>Vardas</span>{displayName}</p>}
+          </div>
+
+          {isEditingProfile ? (
+            <form onSubmit={saveProfile}>
+              <div className="login-field">
+                <label htmlFor="profile-name">Vardas</label>
+                <input
+                  id="profile-name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Įveskite vardą"
+                  value={nameDraft}
+                  onChange={(event) => setNameDraft(event.target.value)}
+                />
+              </div>
+              <div className="profile-actions">
+                <button type="submit" className="login-button">Išsaugoti</button>
+                <button
+                  type="button"
+                  className="profile-cancel"
+                  onClick={() => {
+                    setNameDraft(displayName)
+                    setIsEditingProfile(false)
+                  }}
+                >
+                  Atšaukti
+                </button>
+              </div>
+            </form>
+          ) : (
+            <button
+              type="button"
+              className="login-button"
+              onClick={() => setIsEditingProfile(true)}
+            >
+              Redaguoti profilį
+            </button>
+          )}
+        </div>
+      </div>
+    )
   }
 
   const isRegistering = mode === 'register'

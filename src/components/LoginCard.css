@@ -133,6 +133,56 @@
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
+
+  .profile-card .login-card-title {
+    margin-bottom: 24px;
+  }
+
+  .profile-details {
+    margin-bottom: 24px;
+  }
+
+  #center .profile-details p {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 0 16px;
+    color: var(--text-h);
+    overflow-wrap: anywhere;
+  }
+
+  #center .profile-details p:last-child {
+    margin-bottom: 0;
+  }
+
+  .profile-details span {
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .profile-cancel {
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .profile-cancel:hover {
+    color: var(--text-h);
+  }
+
+  .profile-cancel:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
   
   @media (max-width: 480px) {
     .login-card {
