@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 
 const tasks = [
@@ -8,17 +9,38 @@ const tasks = [
   { id: 5, title: 'Pakartoti anglų kalbos žodžius', points: 15, done: false },
 ]
 
-function renderTasks() {
-  return tasks.map((task) => (
-    <li className="task-item" key={task.id}>
-      <span className="task-number">{String(task.id).padStart(2, '0')}</span>
-      <span className="task-title">{task.title}</span>
-      <span className="task-points">+{task.points} tšk.</span>
+function renderTasks(taskList, toggleTask) {
+  return taskList.map((task) => (
+    <li key={task.id}>
+      <button
+        type="button"
+        className={`task-item ${task.done ? 'done' : ''}`}
+        onClick={() => toggleTask(task.id)}
+        aria-pressed={task.done}
+      >
+        <span className="task-check" aria-hidden="true">{task.done ? '✓' : ''}</span>
+        <span className="task-number">{String(task.id).padStart(2, '0')}</span>
+        <span className="task-title">{task.title}</span>
+        <span className="task-points">+{task.points} tšk.</span>
+      </button>
     </li>
   ))
 }
 
 function App() {
+  const [taskList, setTaskList] = useState(tasks)
+
+  function updateStats() {
+    // Statistikos logika bus pridėta kitame žingsnyje.
+  }
+
+  function toggleTask(taskId) {
+    setTaskList((currentTasks) => currentTasks.map((task) => (
+      task.id === taskId ? { ...task, done: !task.done } : task
+    )))
+    updateStats()
+  }
+
   return (
     <main className="dashboard">
       <header className="dashboard-header">
@@ -64,7 +86,7 @@ function App() {
           <span>5 užduotys</span>
         </div>
         <ul className="task-list">
-          {renderTasks()}
+          {renderTasks(taskList, toggleTask)}
         </ul>
       </section>
     </main>
