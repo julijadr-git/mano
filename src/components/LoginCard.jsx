@@ -45,6 +45,12 @@ function LoginCard({ loggedInEmail, onLogin }) {
   const [displayName, setDisplayName] = useState('')
   const [nameDraft, setNameDraft] = useState('')
   const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState('')
+  const [isSavingPassword, setIsSavingPassword] = useState(false)
 
   useEffect(() => {
     if (!loggedInEmail) return
@@ -54,6 +60,8 @@ function LoginCard({ loggedInEmail, onLogin }) {
     setDisplayName(savedName)
     setNameDraft(savedName)
     setIsEditingProfile(false)
+    setIsChangingPassword(false)
+    setPasswordMessage('')
   }, [loggedInEmail])
 
   function saveProfile(event) {
@@ -69,6 +77,55 @@ function LoginCard({ loggedInEmail, onLogin }) {
     )
     setDisplayName(nextName)
     setIsEditingProfile(false)
+  }
+
+  async function changePassword(event) {
+    event.preventDefault()
+    setPasswordMessage('')
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage('Nauji slaptažodžiai nesutampa.')
+      return
+    }
+
+    setIsSavingPassword(true)
+    try {
+      const account = getSavedAccount()
+      if (!account || account.email !== loggedInEmail) {
+        setPasswordMessage('Nepavyko rasti paskyros duomenų.')
+        return
+      }
+
+      const currentHash = await hashPassword(currentPassword, fromBase64(account.salt))
+      const savedHash = fromBase64(account.passwordHash)
+      const currentMatches = currentHash.length === savedHash.length &&
+        currentHash.every((byte, index) => byte === savedHash[index])
+
+      if (!currentMatches) {
+        setPasswordMessage('Dabartinis slaptažodis neteisingas.')
+        return
+      }
+
+      const nextSalt = crypto.getRandomValues(new Uint8Array(16))
+      const nextHash = await hashPassword(newPassword, nextSalt)
+      localStorage.setItem(
+        ACCOUNT_KEY,
+        JSON.stringify({
+          ...account,
+          salt: toBase64(nextSalt),
+          passwordHash: toBase64(nextHash),
+        }),
+      )
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setIsChangingPassword(false)
+      setPasswordMessage('Slaptažodis pakeistas.')
+    } catch {
+      setPasswordMessage('Nepavyko pakeisti slaptažodžio. Bandykite dar kartą.')
+    } finally {
+      setIsSavingPassword(false)
+    }
   }
 
   async function handleSubmit(event) {
@@ -175,14 +232,92 @@ function LoginCard({ loggedInEmail, onLogin }) {
                 </button>
               </div>
             </form>
+          ) : isChangingPassword ? (
+            <form onSubmit={changePassword}>
+              <div className="login-field">
+                <label htmlFor="current-password">Dabartinis slaptažodis</label>
+                <input
+                  id="current-password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  required
+                />
+              </div>
+              <div className="login-field">
+                <label htmlFor="new-password">Naujas slaptažodis</label>
+                <input
+                  id="new-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                  minLength={8}
+                  required
+                />
+              </div>
+              <div className="login-field">
+                <label htmlFor="confirm-password">Pakartokite naują slaptažodį</label>
+                <input
+                  id="confirm-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  minLength={8}
+                  required
+                />
+              </div>
+              {passwordMessage && (
+                <p className="profile-password-message" role="status">
+                  {passwordMessage}
+                </p>
+              )}
+              <div className="profile-actions">
+                <button type="submit" className="login-button" disabled={isSavingPassword}>
+                  {isSavingPassword ? 'Palaukite…' : 'Išsaugoti slaptažodį'}
+                </button>
+                <button
+                  type="button"
+                  className="profile-cancel"
+                  onClick={() => {
+                    setIsChangingPassword(false)
+                    setCurrentPassword('')
+                    setNewPassword('')
+                    setConfirmPassword('')
+                    setPasswordMessage('')
+                  }}
+                >
+                  Atšaukti
+                </button>
+              </div>
+            </form>
           ) : (
-            <button
-              type="button"
-              className="login-button"
-              onClick={() => setIsEditingProfile(true)}
-            >
-              Redaguoti profilį
-            </button>
+            <div className="profile-actions">
+              <button
+                type="button"
+                className="login-button"
+                onClick={() => setIsEditingProfile(true)}
+              >
+                Redaguoti profilį
+              </button>
+              <button
+                type="button"
+                className="profile-secondary-action"
+                onClick={() => {
+                  setIsChangingPassword(true)
+                  setPasswordMessage('')
+                }}
+              >
+                Keisti slaptažodį
+              </button>
+              {passwordMessage && (
+                <p className="profile-password-message" role="status">
+                  {passwordMessage}
+                </p>
+              )}
+            </div>
           )}
         </div>
       </div>

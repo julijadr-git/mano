@@ -166,6 +166,33 @@
     gap: 12px;
   }
 
+  .profile-secondary-action {
+    padding: 8px;
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-h);
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .profile-secondary-action:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+  }
+
+  .profile-secondary-action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .profile-password-message {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+  }
+
   .profile-cancel {
     padding: 8px;
     border: 0;
