@@ -101,6 +101,38 @@
     outline: 2px solid #38bdf8;
     outline-offset: 3px;
   }
+
+  .login-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
+  .login-message {
+    margin: 0 0 16px;
+    color: #ff9b9b;
+    font-size: 14px;
+  }
+
+  .login-mode-switch {
+    margin: 20px 0 0;
+    color: var(--text);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .login-mode-switch button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .login-mode-switch button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
   
   @media (max-width: 480px) {
     .login-card {
