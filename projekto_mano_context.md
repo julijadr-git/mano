@@ -2,62 +2,66 @@
 
 ## Projekto paskirtis ir darbo eiga
 
-Projektas – Vite + React prisijungimo aplikacija. Naudojami JavaScript, JSX ir paprastas CSS. Nauji komponentai laikomi `src/components/` kataloge, jų stiliai – atskiruose CSS failuose. Sąsajos tekstai lietuviški.
+Projektas – Vite + React mokomoji vaikų užduočių aplikacija. Naudojami JavaScript, JSX ir paprastas CSS. Užduotys bei vaikai saugomi esamoje Supabase duomenų bazėje. Nenaudojama autentifikacija; duomenų bazei taikomos vartotojos jau nustatytos RLS sąlygos.
 
-Vartotoja pakeitimus paprastai pritaiko rankiniu būdu Cursor redaktoriuje. Dirbti po vieną aiškų žingsnį ir po kiekvieno UI pakeitimo paprašyti patikrinti rezultatą su `npm run dev`. Prieš keičiant failą perskaityti jo esamą turinį ir `README.md`. Nenaudoti Cursor Agent. `main.jsx` keisti tik jei būtina.
+Prieš keičiant failą perskaityti jo esamą turinį ir `README.md`; pirmenybę teikti dabartiniam kodui, nes README vis dar aprašo seną prisijungimo puslapį. Nauji UI komponentai laikomi `src/components/`, jų stiliai – atskiruose CSS failuose. Sąsajos tekstai lietuviški. `main.jsx` keisti tik jei būtina. Naują funkciją laikyti įgyvendinta tik ją įrašius į kodą, o patikrinta – tik atlikus atitinkamą patikrą.
 
 ## Dabartinė funkcionalumo būsena
 
-### Puslapio karkasas ir navigacija
+### Supabase konfigūracija
 
-- Tamsi, responsyvi sąsaja; pagrindiniai breakpoint'ai `1024px` ir `480px`.
-- Navigacijos juosta per visą plotį, centre – inline SVG logotipas.
-- Kalbos meniu leidžia pasirinkti LT arba EN, bet keičia tik žymą. Puslapio turinys neverčiamas.
-- Prisijungus viršuje dešinėje, prieš kalbos meniu, rodomas „Atsijungti“ mygtukas. Jis siaurame ekrane sumažinamas.
-- Po „Sveiki atvykę!“ anksčiau buvęs tekstas „Prisijunkite prie savo paskyros“ pašalintas.
+- Priklausomybė `@supabase/supabase-js` deklaruota `package.json` ir `package-lock.json`.
+- `src/lib/supabase.js` sukuria klientą tik esant `VITE_SUPABASE_URL` ir `VITE_SUPABASE_ANON_KEY` aplinkos kintamiesiems. React kode naudojamas tik viešas anon raktas.
+- `.env.example` rodo reikiamus kintamųjų pavadinimus. Tikros reikšmės turi būti vietiniame, į Git neįkeliamame `.env.local`; šiame projekte `.env.local` patikrinimo metu nerastas.
+- Trūkstant konfigūracijos, puslapyje rodoma aiški žinutė ir duomenys nekeičiami vietoje.
 
-### Demonstracinė registracija ir prisijungimas
+### Vaikai ir užduotys
 
-- `src/components/LoginCard.jsx` turi registracijos ir prisijungimo formas su el. paštu bei slaptažodžiu.
-- Pirmą paskyrą galima susikurti vietoje; leidžiama viena paskyra kiekvienai naršyklei.
-- Slaptažodis nesaugomas paprastu tekstu: `localStorage` įrašomi PBKDF2-SHA-256 kontrolinė reikšmė ir atsitiktinė druska. Naujas slaptažodis turi būti bent 8 simbolių.
-- Prisijungimas ir paskyra veikia tik tame pačiame įrenginyje bei naršyklėje. Aplikacija neturi serverio, API ar tikros sesijų sistemos; perkrovus puslapį reikia prisijungti iš naujo, o išvalius svetainės duomenis paskyra prarandama.
-- Tai prototipas, ne tikrų paskyrų autentifikavimas. Kliento pusėje veikiantį patikrinimą galima apeiti; slaptažodžių keitimas šio apribojimo nepanaikina.
+- `src/App.jsx` įkelia vaikų sąrašą iš `children`, leidžia pridėti vaiką ir pasirinkti, kurio vaiko užduotis rodyti.
+- Pasirinkto vaiko užduotys įkeliamos iš `tasks`. Galima sukurti įrašą su pavadinimu, neprivalomu aprašymu, taškais ir data; pradinė būsena `not_done`.
+- Užduotį galima pažymėti atlikta, jei jos data šiandien arba ankstesnė; būsena tampa `pending`, o `completed_at` nustatomas dabartiniu laiku. Ateities užduoties atlikti negalima.
+- `pending` užduotį galima patvirtinti (`approved`) arba atmesti (`rejected`); abiem atvejais nustatomas `reviewed_at`. Atmestą užduotį galima pateikti atlikimo patvirtinimui iš naujo. Patvirtintos užduoties taškai neskaičiuojami antrą kartą ir jos būsena sąsajoje nebekeičiama.
+- Sėkmingi įrašymai ir atnaujinimai atnaujina React ekraną iš Supabase atsakymo. Užklausų klaidos parodomos lietuviškai; tuščios vaikų ir užduočių būsenos turi paaiškinimus.
+- Statistika rodoma pagal pasirinktą vaiką: taškų suma tik iš `approved`, atlikta skaičiuoja `pending` ir `approved`, laukiančių patvirtinimo skaičius skaičiuoja `pending`. Progresas skaičiuojamas iš atliktų (`pending` arba `approved`) užduočių santykio su visomis vaiko užduotimis.
+- Duomenų bazės schema nekeičiama: laikoma, kad `children` ir `tasks` lentelės jau yra. Naujų lentelių, autentifikacijos ar backend paslaugų nepridėta.
 
-### Profilis
+### Dizainas
 
-- Prisijungus rodoma „Mano profilis“ kortelė su el. paštu.
-- „Redaguoti profilį“ leidžia nustatyti vardą. Vardas įrašomas greta paskyros duomenų naršyklės `localStorage`.
-- „Keisti slaptažodį“ forma prašo dabartinio slaptažodžio, naujo slaptažodžio ir jo pakartojimo. Tikrinamas dabartinis slaptažodis ir naujų įrašų sutapimas; pranešimas rodomas profilyje.
-- Atsijungus profilio kortelė paslepiama. Paskyra ir profilio duomenys lieka `localStorage`.
+- Esama tamsi tema ir suvestinės kortelių stilius išsaugoti. Nauji formų ir veiksmų stiliai aprašyti `src/App.css`; spalvoms naudojami `src/index.css` `:root` kintamieji, kai tai įmanoma.
+- Pagrindinio turinio plotis iki 960px; statistika siaurame ekrane išdėstoma viena kolona. Užduočių veiksmai ir formos persitvarko siauriems ekranams.
+- `src/components/LoginCard.jsx` ir `LoginCard.css` liko projekte, bet `App.jsx` jų neimportuoja; dabartiniame ekrane autentifikavimo funkcijų nėra.
 
-## Projekto struktūra ir svarbūs failai
+## Projekto failai
 
 ```text
+.env.example
 src/
-  assets/
+  lib/
+    supabase.js          # Supabase klientas ir aplinkos konfigūracijos tikrinimas
   components/
-    LoginCard.jsx       # registracija, prisijungimas, profilis, slaptažodžio keitimas
-    LoginCard.css       # formų ir profilio kortelės stiliai
-  App.jsx               # navigacija, kalbos meniu ir prisijungimo būsena
-  App.css               # navigacijos, atsijungimo mygtuko ir puslapio stiliai
-  index.css             # bendri stiliai ir :root kintamieji
+    LoginCard.jsx        # senas, dabartiniame puslapyje nenaudojamas komponentas
+    LoginCard.css
+  App.jsx                # vaikų, užduočių, būsenų ir statistikos UI bei logika
+  App.css                # suvestinės ir Supabase UI stiliai
+  index.css              # bendri stiliai ir CSS kintamieji
   main.jsx
-README.md
+package.json
+package-lock.json
+README.md                # pasenęs: aprašo prisijungimo aplikaciją
 projekto_mano_context.md
 ```
 
-`src/index.css` spalvų kintamieji apima `--bg`, `--text`, `--text-h`, `--accent`, `--accent-bg`, `--accent-border` ir kitus. Išlaikyti tamsią temą, violetinį akcentą, apvalintus kampus ir responsyvumą.
+## Patikra ir ribojimai
 
-## Patikra ir būsimi darbai
-
-- Vartotoja patvirtino, kad profilio kortelė ir vardo redagavimas veikia.
-- Vartotoja patvirtino, kad slaptažodžio keitimas veikia.
-- Paskutinių kodo pakeitimų automatizuoti testai nevykdyti. `git diff --check` po kai kurių pakeitimų nerado klaidų.
-- Tolimesni pakeitimai tik pagal vartotojos prašymą. Naują funkciją laikyti patikrinta tik vartotojai ją išbandžius.
+- Po integracijos `npm run build` sėkmingai susikompiliavo. `npx eslint src/App.jsx src/lib/supabase.js` klaidų nerado. Viso projekto `npm run lint` dar praneša apie ankstesnę `src/components/LoginCard.jsx` klaidą; tas komponentas šiame ekrane nenaudojamas.
+- Patikrinta tik tada, kai naudotojo `.env.local` turi galiojantį Supabase URL ir anon raktą, o aplikacijoje galima įrašyti duomenis, perkrauti puslapį ir matyti išlikusius įrašus.
+- Be `.env.local` galima patikrinti kompiliavimą, bet negalima patikrinti realių Supabase užklausų ar duomenų išlikimo.
+- Supabase lentelės `children`, `tasks` ir jų schema turi būti sukurtos iš anksto. RLS nustatymai iš kodo nekeičiami.
+- Tolimesni pakeitimai tik pagal vartotojos prašymą.
 
 ## Paleidimas
 
 ```bash
+npm install
 npm run dev
 ```
